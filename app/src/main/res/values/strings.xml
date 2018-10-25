@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Contact Management System</string>
+    <string name="journey_makes_you_stronger">JOURNEY MAKES YOU STRONGER</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="sing_in">SING IN</string>
+    <string name="ready_to_go">Ready to go</string>
+    <string name="if_you_not_registered_please_swipe">If You not registered Please Swipe Your thumb or click</string>
+</resources>
