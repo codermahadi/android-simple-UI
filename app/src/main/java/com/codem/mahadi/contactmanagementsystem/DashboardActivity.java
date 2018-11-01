@@ -1,5 +1,6 @@
 package com.codem.mahadi.contactmanagementsystem;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
@@ -26,6 +27,8 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
         switch (view.getId()) {
             case R.id.pbook:
                 Toast.makeText(this, "Phone book", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(DashboardActivity.this, PhoneBookActivity.class);
+                startActivity(intent);
 
             default:
                 Toast.makeText(this, "Wrong", Toast.LENGTH_LONG).show();
