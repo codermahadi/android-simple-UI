@@ -10,13 +10,25 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class PhoneBookActivity extends AppCompatActivity {
 
     //a list to store all the products
-    List<Product> productList;
+    List<Product> productList = productList = new ArrayList<>();
 
     //the recyclerview
     RecyclerView recyclerView;
@@ -37,116 +49,7 @@ public class PhoneBookActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        //initializing the productlist
-        productList = new ArrayList<>();
-
-        //adding some items to our list
-        productList.add(
-                new Product(
-                        1,
-                        "Apple MacBook Air Core i5 5th Gen - (8 GB/128 GB SSD/Mac OS Sierra)",
-                        "13.3 inch, Silver, 1.35 kg",
-                        4.3,
-                        60000,
-                        R.drawable.desk));
-
-        productList.add(
-                new Product(
-                        1,
-                        "Dell Inspiron 7000 Core i5 7th Gen - (8 GB/1 TB HDD/Windows 10 Home)",
-                        "14 inch, Gray, 1.659 kg",
-                        4.3,
-                        60000,
-                        R.drawable.desk));
-
-        productList.add(
-                new Product(
-                        1,
-                        "Microsoft Surface Pro 4 Core m3 6th Gen - (4 GB/128 GB SSD/Windows 10)",
-                        "13.3 inch, Silver, 1.35 kg",
-                        4.3,
-                        60000,
-                        R.drawable.desk));
-
-        productList.add(
-                new Product(
-                        1,
-                        "Microsoft Surface Pro 4 Core m3 6th Gen - (4 GB/128 GB SSD/Windows 10)",
-                        "13.3 inch, Silver, 1.35 kg",
-                        4.3,
-                        60000,
-                        R.drawable.desk));
-
-        productList.add(
-                new Product(
-                        1,
-                        "Microsoft Surface Pro 4 Core m3 6th Gen - (4 GB/128 GB SSD/Windows 10)",
-                        "13.3 inch, Silver, 1.35 kg",
-                        4.3,
-                        60000,
-                        R.drawable.desk));
-
-        productList.add(
-                new Product(
-                        1,
-                        "Microsoft Surface Pro 4 Core m3 6th Gen - (4 GB/128 GB SSD/Windows 10)",
-                        "13.3 inch, Silver, 1.35 kg",
-                        4.3,
-                        60000,
-                        R.drawable.desk));
-
-        productList.add(
-                new Product(
-                        1,
-                        "Microsoft Surface Pro 4 Core m3 6th Gen - (4 GB/128 GB SSD/Windows 10)",
-                        "13.3 inch, Silver, 1.35 kg",
-                        4.3,
-                        60000,
-                        R.drawable.desk));
-
-        productList.add(
-                new Product(
-                        1,
-                        "Microsoft Surface Pro 4 Core m3 6th Gen - (4 GB/128 GB SSD/Windows 10)",
-                        "13.3 inch, Silver, 1.35 kg",
-                        4.3,
-                        60000,
-                        R.drawable.desk));
-
-        productList.add(
-                new Product(
-                        1,
-                        "Microsoft Surface Pro 4 Core m3 6th Gen - (4 GB/128 GB SSD/Windows 10)",
-                        "13.3 inch, Silver, 1.35 kg",
-                        4.3,
-                        60000,
-                        R.drawable.desk));
-
-        productList.add(
-                new Product(
-                        1,
-                        "Microsoft Surface Pro 4 Core m3 6th Gen - (4 GB/128 GB SSD/Windows 10)",
-                        "13.3 inch, Silver, 1.35 kg",
-                        4.3,
-                        60000,
-                        R.drawable.desk));
-
-        productList.add(
-                new Product(
-                        1,
-                        "Microsoft Surface Pro 4 Core m3 6th Gen - (4 GB/128 GB SSD/Windows 10)",
-                        "13.3 inch, Silver, 1.35 kg",
-                        4.3,
-                        60000,
-                        R.drawable.desk));
-
-        //creating recyclerview adapter
-        ProductAdapter adapter = new ProductAdapter(this, productList);
-
-        //setting adapter to recyclerview
-        recyclerView.setAdapter(adapter);
-
-
+        getServerData();
 
     }
 
@@ -171,6 +74,40 @@ public class PhoneBookActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
-}
+    }
+
+    private void getServerData() {
+        String urlGetServerData = "http://nutrition-bd.com/api/company_profiles";
+        System.out.print(urlGetServerData);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, urlGetServerData, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        System.out.println(response);
+                        try {
+                            Gson gson = new Gson();
+                            JSONArray jsonArray = response.getJSONArray("data");
+
+                            for (int p = 0; p < jsonArray.length(); p++) {
+                                JSONObject jsonObject = jsonArray.getJSONObject(p);
+                                Product product = gson.fromJson(String.valueOf(jsonObject), Product.class);
+                                productList.add(product);
+                            }
+                            ProductAdapter productAdapter = new ProductAdapter(getApplicationContext(), productList);
+                            recyclerView.setAdapter(productAdapter);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        System.out.println(error.toString());
+                    }
+                });
+        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+        requestQueue.add(jsonObjectRequest);
+    }
 
 }

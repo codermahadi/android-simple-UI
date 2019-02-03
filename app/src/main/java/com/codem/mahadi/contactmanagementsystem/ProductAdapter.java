@@ -39,12 +39,12 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         Product product = productList.get(position);
 
         //binding the data with the viewholder views
-        holder.textViewTitle.setText(product.getTitle());
-        holder.textViewShortDesc.setText(product.getShortdesc());
-        holder.textViewRating.setText(String.valueOf(product.getRating()));
-        holder.textViewPrice.setText(String.valueOf(product.getPrice()));
+        holder.textViewTitle.setText(product.getCompany_name());
+        holder.textViewShortDesc.setText(product.getCompany_address());
+        holder.textViewRating.setText(String.valueOf(product.getEmail()));
+        holder.textViewPrice.setText(String.valueOf(product.getId()));
 
-        holder.imageView.setImageDrawable(mCtx.getResources().getDrawable(product.getImage()));
+        holder.imageView.setImageDrawable(mCtx.getResources().getDrawable(R.drawable.bell));
 
     }
 

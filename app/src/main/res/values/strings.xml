@@ -6,4 +6,5 @@
     <string name="sing_in">SING IN</string>
     <string name="ready_to_go">Ready to go</string>
     <string name="if_you_not_registered_please_swipe">If You not registered Please Swipe Your thumb or click</string>
+    <string name="title_activity_main">MainActivity</string>
 </resources>
